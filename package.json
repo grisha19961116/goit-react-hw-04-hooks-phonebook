@@ -1,5 +1,5 @@
 {
-  "homepage": "https://grisha19961116.github.Io/goit-react-hw-03-phonebook",
+  "homepage": "https://grisha19961116.github.Io/goit-react-hw-04-hooks-phonebook",
   "name": "react-21-22",
   "version": "0.1.0",
   "private": true,
@@ -20,7 +20,7 @@
     "yup": "^0.32.8"
   },
   "scripts": {
-    "start": "set PORT=3002 && react-scripts start",
+    "start": "set PORT=3005 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
