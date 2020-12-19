@@ -53,12 +53,11 @@ function App() {
   const handleRemoveContactFromLocalStor = id => {
     const savedSettings = localStorage.getItem('name');
     const parsedSettings = JSON.parse(savedSettings);
-
-    if (parsedSettings.length < 0) {
+    if (parsedSettings === null) {
       return;
     }
 
-    if (parsedSettings === null) {
+    if (parsedSettings.length < 0) {
       return;
     }
 
