@@ -23,12 +23,72 @@ function ContactForm({ onAdd, onCheckUnique }) {
   };
 
   const validateFrom = () => {
-    if (!name || !phone) {
-      toast('Some filed is empty');
+    if (!name && !phone) {
+      toast.warn('⚠️ Fields are empty!', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       return false;
     }
 
-    return onCheckUnique(name);
+    if (!name && phone) {
+      toast.warn('⚠️ Field name empty!', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
+    }
+
+    if (!phone && name) {
+      toast.warn('⚠️ Field phone empty!', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
+    }
+
+    if (phone.length !== 10) {
+      toast.warn('⚠️ Number has to have 10 symbols!', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
+    }
+
+    if (name.length > 12) {
+      toast.warn('⚠️ Name has to be no longer 12 characters!', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
+    }
+
+    return onCheckUnique(name, phone);
   };
 
   const resetForm = () => {
@@ -38,12 +98,9 @@ function ContactForm({ onAdd, onCheckUnique }) {
 
   const handleFromSubmit = e => {
     e.preventDefault();
-    const isValidForm = validateFrom();
-
-    if (!isValidForm) return;
-
+    const isExistPhone = validateFrom();
+    if (!isExistPhone) return;
     const newContact = { id: uuidv4(), name, phone };
-
     onAdd(newContact);
     resetForm();
 
@@ -63,8 +120,9 @@ function ContactForm({ onAdd, onCheckUnique }) {
   };
 
   return (
-    <form onSubmit={handleFromSubmit}>
+    <form className={style.contactForm} onSubmit={handleFromSubmit}>
       <input
+        className={style.contactForm__input}
         type="text"
         name="name"
         placeholder="Enter name"
@@ -72,13 +130,16 @@ function ContactForm({ onAdd, onCheckUnique }) {
         onChange={handleChangeForm}
       ></input>
       <input
+        className={style.contactForm__input}
         type="tel"
         name="phone"
         placeholder="Enter phone number"
         value={phone}
         onChange={handleChangeForm}
       ></input>
-      <button type="submit">Add Contact</button>
+      <button className={style.buttonSubmit} type="submit">
+        Add Contact
+      </button>
     </form>
   );
 }

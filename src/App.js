@@ -12,20 +12,8 @@ function App() {
   useEffect(() => {
     const savedSettings = localStorage.getItem('name');
     const parsedSettings = JSON.parse(savedSettings);
-
-    if (parsedSettings === null) {
-      setContacts([
-        { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-        { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      ]);
-
-      return;
-    }
-
-    if (parsedSettings.length === 0) {
-      return;
-    }
-
+    if (parsedSettings === null) return;
+    if (parsedSettings.length === 0) return;
     setContacts(parsedSettings);
   }, []);
 
@@ -38,11 +26,30 @@ function App() {
     setContacts(prevState => [...prevState, newContact]);
   };
 
-  const handleCheckUniqueContact = name => {
-    const isExistContact = !!contacts.find(contact => contact.name === name);
-    isExistContact && alert('Contact is already exist');
-
-    return !isExistContact;
+  const handleCheckUniqueContact = (name, phone) => {
+    const isExistName = contacts.some(contacts => contacts.name === name);
+    const isExistPhone = contacts.some(contacts => contacts.phone === phone);
+    isExistName &&
+      toast.warn('⚠️ You have contact with same name!', {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    isExistPhone &&
+      toast.error('🚀 Number has been using!', {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    return !isExistPhone;
   };
 
   const handleRemoveContact = id => {
@@ -53,14 +60,8 @@ function App() {
   const handleRemoveContactFromLocalStor = id => {
     const savedSettings = localStorage.getItem('name');
     const parsedSettings = JSON.parse(savedSettings);
-    if (parsedSettings === null) {
-      return;
-    }
-
-    if (parsedSettings.length < 0) {
-      return;
-    }
-
+    if (parsedSettings === null) return;
+    if (parsedSettings.length === 0) return;
     const arrayDeleteById = parsedSettings.filter(contact => contact.id !== id);
     const serializedState = JSON.stringify(arrayDeleteById);
     localStorage.setItem('name', serializedState);
@@ -78,19 +79,29 @@ function App() {
 
   return (
     <>
-      <h2>From Contact</h2>
+      <h2 className={style.titleList}>From Contact</h2>
       <ContactForm
         onAdd={handleAddContact}
         onCheckUnique={handleCheckUniqueContact}
       />
-      <h2>Contacts list</h2>
+      <h2 className={style.titleList}>Contacts list</h2>
       <Filter filter={filter} onChange={handleFilterChange} />
       <ContactList
         contacts={getVisibleContacts()}
         onRemove={handleRemoveContact}
         onRemoveLocal={handleRemoveContactFromLocalStor}
       />
-      <ToastContainer></ToastContainer>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
